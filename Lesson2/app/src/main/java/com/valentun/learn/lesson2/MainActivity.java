@@ -1,113 +1,69 @@
 package com.valentun.learn.lesson2;
 
-import android.support.design.widget.TextInputLayout;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Patterns;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MainActivity extends AppCompatActivity {
-    public static final int MIN_NAME_LENGTH = 4;
-    public static final int MIN_PASSWORD_LENGTH = 7;
 
-    private static final String EMPTY_STRING = "";
+    public static final String EXTRA_NAME = "MainActivity.Name";
+    public static final String EXTRA_EMAIL = "MainActivity.Email";
+    public static final String EXTRA_NOTIFICATIONS = "MainActivity.Notifications";
+    public static final String EXTRA_GENDER = "MainActivity.GENDER";
 
-    private Pattern emailPattern = Patterns.EMAIL_ADDRESS;
+    private TextView nameView;
+    private TextView emailView;
+    private TextView notificationsView;
+    private TextView genderView;
 
-    private TextInputLayout emailContainer;
-    private TextInputLayout nameContainer;
-    private TextInputLayout passwordContainer;
-
-    private EditText email;
-    private EditText name;
-    private EditText password;
-
-    private TextView alias;
-
-    private String error;
-
+    private Button changeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        error = getString(R.string.error);
+        nameView = findViewById(R.id.main_name);
+        emailView = findViewById(R.id.main_email);
+        genderView = findViewById(R.id.main_gender);
+        notificationsView = findViewById(R.id.main_notifications);
 
-        email = findViewById(R.id.email);
-        name = findViewById(R.id.name);
-        password = findViewById(R.id.password);
+        changeButton = findViewById(R.id.main_change);
 
-        emailContainer = findViewById(R.id.email_container);
-        passwordContainer = findViewById(R.id.password_container);
-        nameContainer = findViewById(R.id.name_container);
+        Intent data = getIntent();
 
-        alias = findViewById(R.id.alias_view);
+        if (data != null) {
+            String name = data.getStringExtra(EXTRA_NAME);
+            String email = data.getStringExtra(EXTRA_EMAIL);
+            int gender = data.getIntExtra(EXTRA_GENDER, 0);
+            boolean notifications = data.getBooleanExtra(EXTRA_NOTIFICATIONS, false);
 
-        name.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isNameValid(s.toString())) {
-                    nameContainer.setError(EMPTY_STRING);
-                } else {
-                    nameContainer.setError(error);
-                }
+            String[] genders = getResources().getStringArray(R.array.genders);
+            String genderString = genders[gender];
 
-                alias.setText(getString(R.string.alias, s));
-            }
-        });
+            int notificationsRes = notifications ? R.string.notifications_enabled : R.string.notifications_disabled;
 
-        email.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isEmailValid(s.toString())) {
-                    emailContainer.setError(EMPTY_STRING);
-                } else {
-                    emailContainer.setError(error);
-                }
-            }
-        });
 
-        password.addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isPasswordValid(s.toString())) {
-                    passwordContainer.setError(EMPTY_STRING);
-                } else {
-                    passwordContainer.setError(error);
-                }
-            }
-        });
-    }
-
-    private boolean isNameValid(String name) {
-        return TextUtils.isEmpty(name) || name.length() > MIN_NAME_LENGTH;
-    }
-
-    private boolean isEmailValid(String email) {
-        return TextUtils.isEmpty(email) || emailPattern.matcher(email).matches();
-    }
-
-    private boolean isPasswordValid(String password) {
-        return TextUtils.isEmpty(password) || password.length() > MIN_PASSWORD_LENGTH;
-    }
-
-    private abstract class SimpleTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            nameView.setText(getString(R.string.name_format, name));
+            emailView.setText(getString(R.string.email_format, email));
+            notificationsView.setText(notificationsRes);
+            genderView.setText(getString(R.string.gender_format, genderString));
         }
 
-        @Override
-        public void afterTextChanged(Editable s) {
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchLogin();
+                finish();
+            }
+        });
+    }
 
-        }
+    private void launchLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
