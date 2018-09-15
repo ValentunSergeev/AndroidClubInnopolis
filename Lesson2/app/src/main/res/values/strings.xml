@@ -1,0 +1,14 @@
+<resources>
+    <string name="email_hint">Email</string>
+    <string name="app_name">Lesson2</string>
+    <string name="hint_name">Name</string>
+    <string name="password_hint">Password</string>
+    <string name="error">Invalid</string>
+    <string name="alias">Your alias will be: @%s</string>
+    <string name="gender_title">Choose your gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="other">Other</string>
+    <string name="notifications">Notifications</string>
+</resources>
