@@ -1,8 +1,8 @@
 package com.valentun.learn.lesson2;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AuthManager authManager = AuthManager.getInstance(this);
+
+        if (!authManager.isAuthenticated()) {
+            launchLogin();
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         nameView = findViewById(R.id.main_name);
@@ -33,25 +42,23 @@ public class MainActivity extends AppCompatActivity {
 
         changeButton = findViewById(R.id.main_change);
 
-        Intent data = getIntent();
+        AuthData data = authManager.getAuthData();
 
-        if (data != null) {
-            String name = data.getStringExtra(EXTRA_NAME);
-            String email = data.getStringExtra(EXTRA_EMAIL);
-            int gender = data.getIntExtra(EXTRA_GENDER, 0);
-            boolean notifications = data.getBooleanExtra(EXTRA_NOTIFICATIONS, false);
+        String name = data.getName();
+        String email = data.getEmail();
+        int gender = data.getGender();
+        boolean notifications = data.isNotificationsEnabled();
 
-            String[] genders = getResources().getStringArray(R.array.genders);
-            String genderString = genders[gender];
+        String[] genders = getResources().getStringArray(R.array.genders);
+        String genderString = genders[gender];
 
-            int notificationsRes = notifications ? R.string.notifications_enabled : R.string.notifications_disabled;
+        int notificationsRes = notifications ? R.string.notifications_enabled : R.string.notifications_disabled;
 
 
-            nameView.setText(getString(R.string.name_format, name));
-            emailView.setText(getString(R.string.email_format, email));
-            notificationsView.setText(notificationsRes);
-            genderView.setText(getString(R.string.gender_format, genderString));
-        }
+        nameView.setText(getString(R.string.name_format, name));
+        emailView.setText(getString(R.string.email_format, email));
+        notificationsView.setText(notificationsRes);
+        genderView.setText(getString(R.string.gender_format, genderString));
 
         changeButton.setOnClickListener(new View.OnClickListener() {
             @Override

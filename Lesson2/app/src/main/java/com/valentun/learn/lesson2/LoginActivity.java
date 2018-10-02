@@ -121,19 +121,24 @@ public class LoginActivity extends AppCompatActivity {
     private void openMain() {
         String nameData = name.getText().toString();
         String emailData = email.getText().toString();
+        String passwordData = password.getText().toString();
 
         boolean notificationsEnabled = notifications.isChecked();
         int genderId = gender.getCheckedRadioButtonId();
         View genderView = findViewById(genderId);
         int genderData = gender.indexOfChild(genderView);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_NAME, nameData);
-        intent.putExtra(MainActivity.EXTRA_EMAIL, emailData);
-        intent.putExtra(MainActivity.EXTRA_GENDER, genderData);
-        intent.putExtra(MainActivity.EXTRA_NOTIFICATIONS, notificationsEnabled);
+        AuthData data = new AuthData()
+                .setNotificationsEnabled(notificationsEnabled)
+                .setGender(genderData)
+                .setPassword(passwordData)
+                .setName(nameData)
+                .setEmail(emailData);
 
-        startActivity(intent);
+        AuthManager authManager = AuthManager.getInstance(this);
+        authManager.saveAuthData(data);
+
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     private void showError() {
