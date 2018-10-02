@@ -7,3 +7,5 @@ Code from Innopolis Andorid Club meetings
 ![alt text](https://raw.githubusercontent.com/ValentunSergeev/AndroidClubInnopolis/master/Lab2.png)
 ### Lesson 3 - add second screen to show entered information
 ![alt text](https://raw.githubusercontent.com/ValentunSergeev/AndroidClubInnopolis/master/Lab3.png)
+### Lesson 4 - implement dynamic menu where each item depends on corresponding checkbox
+![alt text](https://raw.githubusercontent.com/ValentunSergeev/AndroidClubInnopolis/master/Lab4.png)
